@@ -7,7 +7,7 @@ namespace API_asp_start_project.Infrastructure.Repositories
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options) { }
 
-        public DbSet<Owner> Owner { get; set; }
-        public DbSet<Account> Account { get; set; }
+        public DbSet<Owner>? Owners { get; set; }
+        public DbSet<Account>? Accounts { get; set; }
     }
 }

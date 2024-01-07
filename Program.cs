@@ -10,6 +10,7 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureLoggerService();
 builder.Services.AddControllers();
 builder.Services.ConfigureMySqlContext(builder.Configuration);
+builder.Services.ConfigureRepositoryWrapper();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
