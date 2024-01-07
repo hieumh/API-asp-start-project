@@ -1,0 +1,6 @@
+@API_asp_start_project_HostAddress = http://localhost:5097
+
+GET {{API_asp_start_project_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
