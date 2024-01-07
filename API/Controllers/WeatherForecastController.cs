@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API_asp_start_project.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("weather")]
     public class WeatherForecastController : ControllerBase
     {
         private readonly IRepositoryWrapper _repository;
@@ -15,7 +15,7 @@ namespace API_asp_start_project.API.Controllers
             _repository = repository;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet]
         public IEnumerable<string> Get()
         {
             IQueryable<Domain.Models.Account> domesticAccounts = _repository.Account.FindByCondition(x => x.AccountType.Equals("Domestic"));

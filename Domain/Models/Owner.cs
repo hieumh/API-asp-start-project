@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Principal;
 
 namespace API_asp_start_project.Domain.Models
 {
     public class Owner
     {
-        public Guid OwnerId { get; set; }
+        [Column("OwnerId")]
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage ="Name is required")]
         [StringLength(60, ErrorMessage ="Name can't be longer than 60 characters")]
