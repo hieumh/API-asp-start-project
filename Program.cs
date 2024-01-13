@@ -26,6 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UsePathBase(new PathString("/api/v1"));
+app.UseRouting();
 
 app.UseHttpsRedirection();
 
