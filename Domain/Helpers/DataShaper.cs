@@ -1,6 +1,5 @@
 ﻿using System.Dynamic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace API_asp_start_project.Domain.Helpers
 {
@@ -12,7 +11,7 @@ namespace API_asp_start_project.Domain.Helpers
             Properties = typeof(T).GetProperties(BindingFlags.Public  | BindingFlags.Instance);
         }
 
-        public IEnumerable<ExpandoObject> ShapeData(IEnumerable<T> entities, string fieldsString) {
+        public IQueryable<ExpandoObject> ShapeData(IEnumerable<T> entities, string fieldsString) {
             var requiredProperties = GetRequiredProperties(fieldsString);
             
             return FetchData(entities, requiredProperties);
@@ -53,7 +52,7 @@ namespace API_asp_start_project.Domain.Helpers
             return requiredProperties;
         }
 
-        private IEnumerable<ExpandoObject> FetchData(IEnumerable<T> entities, IEnumerable<PropertyInfo> requiredProperties)
+        private IQueryable<ExpandoObject> FetchData(IEnumerable<T> entities, IEnumerable<PropertyInfo> requiredProperties)
         {
             var shapedData = new List<ExpandoObject>();
 
@@ -63,7 +62,7 @@ namespace API_asp_start_project.Domain.Helpers
                 shapedData.Add(shapedObject);
             }
 
-            return shapedData;
+            return (IQueryable<ExpandoObject>)shapedData;
         }
 
         private ExpandoObject FetchDataForEntity(T entity, IEnumerable<PropertyInfo> requiredProperties)
