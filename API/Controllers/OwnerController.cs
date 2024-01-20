@@ -6,6 +6,7 @@ using API_asp_start_project.Infrastructure.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Dynamic;
 
 namespace API_asp_start_project.API.Controllers
 {
@@ -68,15 +69,15 @@ namespace API_asp_start_project.API.Controllers
             return Ok(owners);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetOwnserById(Guid id) {
+        [HttpGet("{id}", Name = "OwnerById")]
+        public IActionResult GetOwnserById(Guid id, [FromQuery] string fields) {
             try
             {
                 _logger.LogInfo("Returned Owner by Id.");
 
-                var owner = _repository.Owner.GetOwnerById(id);
+                var owner = _repository.Owner.GetOwnerById(id, fields);
 
-                if (owner is null)
+                if (owner == default(ExpandoObject))
                 {
                     _logger.LogError($"Owner with id: {id}, hasn't been found in database.");
                     return NotFound();

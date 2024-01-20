@@ -11,10 +11,15 @@ namespace API_asp_start_project.Infrastructure.Repositories
         private IAccountRepository _accountRepository;
         private ISortHelper<Owner> _ownerSortHelper;
         private ISortHelper<Account> _accountSortHelper;
-        public RepositoryWrapper(RepositoryContext repositoryContext, ISortHelper<Owner> ownerSortHelper, ISortHelper<Account> accountSortHelper) {
-            _repositoryContext = repositoryContext; 
+        private IDataShaper<Owner> _ownerDataShaper;
+        private IDataShaper<Account> _accountDataShaper;
+        public RepositoryWrapper(RepositoryContext repositoryContext, ISortHelper<Owner> ownerSortHelper, ISortHelper<Account> accountSortHelper, IDataShaper<Owner> ownerDataShaper, IDataShaper<Account> accountDataShaper)
+        {
+            _repositoryContext = repositoryContext;
             _ownerSortHelper = ownerSortHelper;
             _accountSortHelper = accountSortHelper;
+            _ownerDataShaper = ownerDataShaper;
+            _accountDataShaper = accountDataShaper;
         }
 
         public IOwnerRepository Owner
@@ -23,7 +28,7 @@ namespace API_asp_start_project.Infrastructure.Repositories
             {
                 if (_ownerRepository == null)
                 {
-                    _ownerRepository = new OwnerRepository(_repositoryContext, _ownerSortHelper);
+                    _ownerRepository = new OwnerRepository(_repositoryContext, _ownerSortHelper, _ownerDataShaper);
 
                 }
 
@@ -37,7 +42,7 @@ namespace API_asp_start_project.Infrastructure.Repositories
             {
                 if (_accountRepository == null)
                 {
-                    _accountRepository = new AccountRepository(_repositoryContext, _accountSortHelper);
+                    _accountRepository = new AccountRepository(_repositoryContext, _accountSortHelper, _accountDataShaper);
                 }
 
                 return _accountRepository;

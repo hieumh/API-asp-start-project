@@ -8,9 +8,11 @@ namespace API_asp_start_project.Infrastructure.Repositories
     public class AccountRepository: RepositoryBase<Account>, IAccountRepository
     {
         private ISortHelper<Account> _sortHelper;
-        public AccountRepository(RepositoryContext context, ISortHelper<Account> sortHelper) : base(context)
+        private IDataShaper<Account> _shaper;
+        public AccountRepository(RepositoryContext context, ISortHelper<Account> sortHelper, IDataShaper<Account> shaper) : base(context)
         {
             _sortHelper = sortHelper;
+            _shaper = shaper;
         }
 
         public PagedList<Account> GetAccountsByOwner(Guid id, AccountParameters accountParams)

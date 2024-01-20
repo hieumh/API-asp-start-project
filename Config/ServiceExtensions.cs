@@ -33,6 +33,8 @@ namespace API_asp_start_project.Config
         {
             services.AddScoped<ISortHelper<Owner>, SortHelper<Owner>>();
             services.AddScoped<ISortHelper<Account>, SortHelper<Account>>();
+            services.AddScoped<IDataShaper<Owner>, DataShaper<Owner>>();
+            services.AddScoped<IDataShaper<Account>, DataShaper<Account>>();
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }

@@ -3,18 +3,18 @@ using API_asp_start_project.Domain.Interfaces;
 using API_asp_start_project.Domain.Models;
 using API_asp_start_project.Domain.Pagings;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
+using System.Dynamic;
 
 namespace API_asp_start_project.Infrastructure.Repositories
 {
     public class OwnerRepository : RepositoryBase<Owner>, IOwnerRepository
     {
         private ISortHelper<Owner> _sortHelper;
-        public OwnerRepository(RepositoryContext repositoryContext, ISortHelper<Owner> sortHelper) : base(repositoryContext)
+        private IDataShaper<Owner> _shaper;
+        public OwnerRepository(RepositoryContext repositoryContext, ISortHelper<Owner> sortHelper, IDataShaper<Owner> shaper) : base(repositoryContext)
         {
             _sortHelper = sortHelper;
+            _shaper = shaper;
         }
 
         public IEnumerable<Owner> GetAllOwners()
@@ -22,7 +22,7 @@ namespace API_asp_start_project.Infrastructure.Repositories
             return FindAll().OrderBy(owner => owner.Name).ToList();
         }
 
-        public PagedList<Owner>? GetOwners(OwnerParameters owners)
+        public PagedList<ExpandoObject>? GetOwners(OwnerParameters owners)
         {
             var ownersParameters = FindByCondition(o => o.DateOfBirth.Year >= owners.MinYearOfBirth && o.DateOfBirth.Year <= owners.MaxYearOfBirth);
 
@@ -32,9 +32,10 @@ namespace API_asp_start_project.Infrastructure.Repositories
             }
 
             SearchByName(ref ownersParameters, owners.Name);
-            var sortedOwners = _sortHelper.ApplySort(ownersParameters, owners.OrderBy);
+            _sortHelper.ApplySort(ownersParameters, owners.OrderBy);
+            var shapedData = _shaper.ShapeData(ownersParameters, owners.Fields);
 
-            return PagedList<Owner>.ToPagedList(sortedOwners, owners.PageNumber, owners.PageSize);
+            return PagedList<ExpandoObject>.ToPagedList(shapedData, owners.PageNumber, owners.PageSize);
         }
 
         private void SearchByName(ref IQueryable<Owner> owners, string ownerName)
@@ -51,6 +52,13 @@ namespace API_asp_start_project.Infrastructure.Repositories
         {
             Owner? owner = FindByCondition(owner => owner.Id == id).FirstOrDefault();
             return owner;
+        }
+
+        public ExpandoObject GetOwnerById(Guid ownerId, string fields)
+        {
+            var owner = FindByCondition(owner => owner.Id.Equals(ownerId)).DefaultIfEmpty(new Owner()).FirstOrDefault();
+
+            return _shaper.ShapeData(owner, fields);
         }
 
         public Owner? GetOwnerWithDetails(Guid id)

@@ -8,7 +8,11 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 // Add services to the container.
 builder.Services.ConfigureCors();
 builder.Services.ConfigureLoggerService();
-builder.Services.AddControllers();
+builder.Services.AddControllers(config =>
+{
+    config.RespectBrowserAcceptHeader = true;
+    config.ReturnHttpNotAcceptable = true;
+}).AddXmlDataContractSerializerFormatters().AddNewtonsoftJson();
 builder.Services.ConfigureMySqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryWrapper();
 builder.Services.AddAutoMapper(typeof(Program));
