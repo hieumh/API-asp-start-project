@@ -6,5 +6,6 @@ namespace API_asp_start_project.Domain.Interfaces
     public interface IAccountRepository: IRepositoryBase<Account>
     {
         public PagedList<Account> GetAccountsByOwner(Guid onwerId, AccountParameters accountParams);
+        public IEnumerable<Account> GetAccountsByOwner(Guid onwerId);
     }
 }

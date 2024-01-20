@@ -1,4 +1,6 @@
-﻿using API_asp_start_project.Domain.Interfaces;
+﻿using API_asp_start_project.Domain.Helpers;
+using API_asp_start_project.Domain.Interfaces;
+using API_asp_start_project.Domain.Models;
 
 namespace API_asp_start_project.Infrastructure.Repositories
 {
@@ -7,8 +9,12 @@ namespace API_asp_start_project.Infrastructure.Repositories
         private RepositoryContext _repositoryContext;
         private IOwnerRepository _ownerRepository;
         private IAccountRepository _accountRepository;
-        public RepositoryWrapper(RepositoryContext repositoryContext) {
+        private ISortHelper<Owner> _ownerSortHelper;
+        private ISortHelper<Account> _accountSortHelper;
+        public RepositoryWrapper(RepositoryContext repositoryContext, ISortHelper<Owner> ownerSortHelper, ISortHelper<Account> accountSortHelper) {
             _repositoryContext = repositoryContext; 
+            _ownerSortHelper = ownerSortHelper;
+            _accountSortHelper = accountSortHelper;
         }
 
         public IOwnerRepository Owner
@@ -17,7 +23,7 @@ namespace API_asp_start_project.Infrastructure.Repositories
             {
                 if (_ownerRepository == null)
                 {
-                    _ownerRepository = new OwnerRepository(_repositoryContext);
+                    _ownerRepository = new OwnerRepository(_repositoryContext, _ownerSortHelper);
 
                 }
 
@@ -31,7 +37,7 @@ namespace API_asp_start_project.Infrastructure.Repositories
             {
                 if (_accountRepository == null)
                 {
-                    _accountRepository = new AccountRepository(_repositoryContext);
+                    _accountRepository = new AccountRepository(_repositoryContext, _accountSortHelper);
                 }
 
                 return _accountRepository;

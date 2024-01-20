@@ -43,8 +43,13 @@ namespace API_asp_start_project.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetOwner([FromBody] OwnerParameters ownerParams)
+        public IActionResult GetOwners([FromQuery] OwnerParameters ownerParams)
         {
+            if (!ownerParams.ValidYearRange)
+            {
+                return BadRequest("Max year of birth cannot be less than min year of birth");
+            }
+
             var owners = _repository.Owner.GetOwners(ownerParams);
 
             var metadata = new
@@ -189,7 +194,7 @@ namespace API_asp_start_project.API.Controllers
                     return BadRequest();
                 }
 
-                if (_repository.Account.AccountsByOwner(id).Any())
+                if (_repository.Account.GetAccountsByOwner(id).Any())
                 {
                     _logger.LogError($"Cannot delete owner with id: {id}. It has related accounts. Dleete those accounts first");
                     return BadRequest("Cannot delete owner. It has related accounts. Delete those accounts first");

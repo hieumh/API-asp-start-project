@@ -1,4 +1,6 @@
-﻿using API_asp_start_project.Domain.Interfaces;
+﻿using API_asp_start_project.Domain.Helpers;
+using API_asp_start_project.Domain.Interfaces;
+using API_asp_start_project.Domain.Models;
 using API_asp_start_project.Infrastructure.Repositories;
 using API_asp_start_project.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +31,9 @@ namespace API_asp_start_project.Config
 
         public static void ConfigureRepositoryWrapper(this IServiceCollection services )
         {
+            services.AddScoped<ISortHelper<Owner>, SortHelper<Owner>>();
+            services.AddScoped<ISortHelper<Account>, SortHelper<Account>>();
+
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
     }
